@@ -1,6 +1,28 @@
 import { API_ID, AFFILIATE_ID } from 'babel-dotenv';
 
-function myFunction() {
+function setTrigger() {
+  let triggerDay = new Date();
+  triggerDay.setHours(4);
+  triggerDay.setMinutes(0);
+  ScriptApp.newTrigger('main')
+    .timeBased()
+    .at(triggerDay)
+    .create();
+}
+
+// その日のトリガーを削除する関数(消さないと残る)
+function deleteTrigger() {
+  const triggers = ScriptApp.getProjectTriggers();
+  triggers.forEach(trigger => {
+    if (trigger.getHandlerFunction() == 'main') {
+      ScriptApp.deleteTrigger(trigger);
+    }
+  });
+}
+
+function main() {
+  deleteTrigger();
+
   const spreadsheet = SpreadsheetApp.openById(
     '1QOcgSLSLDkwB70kuAfXHZbmDhSvCTuPppZUpycotPUo'
   );
