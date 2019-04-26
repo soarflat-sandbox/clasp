@@ -43,11 +43,23 @@ function main() {
   );
   // レスポンスをパースする
   const data = JSON.parse(response.getContentText());
-  const items = data.result.items.map(item => [item.content_id]);
+  // レスポンスから商品IDを抽出した配列を生成
+  const ids = data.result.items.map(item => item.content_id);
   // 最後に記述されている行を取得
   const lastRow = sheet.getLastRow();
+  // A列に記述されている全ての値を連想配列で取得し、1次元の配列に変換する
+  const currentIds = sheet
+    .getRange(`A1:A${lastRow}`)
+    .getValues()
+    .map(v => v[0]);
+  Logger.log(currentIds);
+  // 取得したIDからすでに存在するIDを取り除き、連想配列にする。
+  const filterdIds = ids
+    .filter(id => currentIds.indexOf(id) < 0)
+    .map(id => [id]);
+  if (filterdIds.length < 1) return;
   // 最後に記述されている行からAPIのレスポンスを追記
   sheet
-    .getRange('A' + lastRow + ':A' + (items.length + lastRow - 1))
-    .setValues(items);
+    .getRange(`A${lastRow}:A${filterdIds.length + lastRow - 1}`)
+    .setValues(filterdIds);
 }
