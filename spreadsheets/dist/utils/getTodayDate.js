@@ -1,0 +1,1 @@
+"use strict";function getTodayDate(){var todayDate=new Date();var year=todayDate.getFullYear();var month=twoDigit(todayDate.getMonth()+1);var day=twoDigit(todayDate.getDate());return"".concat(year,"-").concat(month,"-").concat(day,"T00:00:00");}

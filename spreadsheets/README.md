@@ -69,3 +69,6 @@ sheet.getLastRow();
 ```js
 sheet.getRange("A:A").getLastRow();
 ```
+
+### 読み込み
+
