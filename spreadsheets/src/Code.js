@@ -37,9 +37,15 @@ function main() {
   sheet.getRange('B4').setValue('melon');
   // 最後の行に'a man', 'a plan', 'panama'をセットする
   sheet.appendRow(['a man', 'a plan', 'panama']);
+  // B1の値（時刻）をパラメータとして利用
+  const date = sheet.getRange('B1').getValue();
+  // B1に値がなければ、現在時刻をセットする。
+  if (!date) {
+    sheet.getRange('B1').setValue(getTodayDate());
+  }
   // APIのレスポンスを取得
   const response = UrlFetchApp.fetch(
-    `https://api.dmm.com/affiliate/v3/ItemList?api_id=${API_ID}&affiliate_id=${AFFILIATE_ID}&site=DMM.com&hits=20&sort=date&keyword=%E3%82%A2%E3%83%8B%E3%83%A1&output=json`
+    `https://api.dmm.com/affiliate/v3/ItemList?api_id=${API_ID}&affiliate_id=${AFFILIATE_ID}&site=DMM.com&hits=20&sort=date&keyword=%E3%82%A2%E3%83%8B%E3%83%A1&gte_date=${date}&output=json`
   );
   // レスポンスをパースする
   const data = JSON.parse(response.getContentText());
